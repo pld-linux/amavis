@@ -36,11 +36,12 @@ A Mail Virus Scanner for Linux and other UN*X based platforms.
 #autoconf
 #automake
 %configure --enable-sendmail=%{_sbindir}/sendmail \
-	--with-virusdir=/var/spool/virus
+	--with-virusdir=/var/spool/virus 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/var/spool/virus
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 %files
@@ -49,7 +50,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/zipsecure
 %attr(755,root,root) %{_sbindir}/scanmails
 %doc AUTHORS COPYING README* BUGS FAQ
-%doc doc/amavis.html doc/amavis.txt doc/amavis.gif
+%doc doc/amavis.html doc/amavis.txt
+# %dir /var/spool/virus
+%attr(1755,root,root) /var/spool/virus
 
 %clean
 rm -rf $RPM_BUILD_ROOT
