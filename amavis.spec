@@ -32,9 +32,9 @@ BuildRequires:	unarj
 BuildRequires:	ncompress
 BuildRequires:	unrar
 BuildRequires:	zoo
-Requires(pre): /bin/id
-Requires(pre): /usr/sbin/useradd
-Requires(postun):      /usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
 Requires:	file
 Requires:	sh-utils
 Requires:	arc
@@ -88,17 +88,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -n "`id -u amavis 2>/dev/null`" ]; then
-       if [ "`id -u amavis`" != "97" ]; then
-               echo "Error: user amavis doesn't have uid=97. Correct this before installing amavis." 1>&2
-               exit 1
-       fi
+	if [ "`id -u amavis`" != "97" ]; then
+		echo "Error: user amavis doesn't have uid=97. Correct this before installing amavis." 1>&2
+		exit 1
+	fi
 else
-       /usr/sbin/useradd -u 97 -r -d /var/spool/amavis  -s /bin/false -c "Anti Virus Checker" -g nobody  amavis 1>&2
+	/usr/sbin/useradd -u 97 -r -d /var/spool/amavis  -s /bin/false -c "Anti Virus Checker" -g nobody  amavis 1>&2
 fi
 
 %postun
 if [ "$1" = "0" ]; then
-       /usr/sbin/userdel amavis
+	/usr/sbin/userdel amavis
 fi
 
 %files
