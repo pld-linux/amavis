@@ -49,6 +49,8 @@ Requires:	sh-utils
 Requires:	unarj
 Requires:	unrar
 Requires:	zoo
+Provides:	group(amavis)
+Provides:	user(amavis)
 Obsoletes:	amavisd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -143,10 +145,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	echo "Removing group amavis."
-	/usr/sbin/groupdel amavis
-	echo "Removing user amavis."
-	/usr/sbin/userdel amavis
+	%userremove amavis
+	%groupremove amavis
 fi
 
 %files
