@@ -5,7 +5,7 @@ Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	0.3.13
-Release:	0.9.%{sub_ver}
+Release:	1.%{sub_ver}
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-%{version}%{sub_ver}.tar.gz
 # Source0-md5:	2b90dba30a5ea2b73c2b348e26967f30
@@ -35,7 +35,9 @@ BuildRequires:	ncompress
 BuildRequires:	unrar
 BuildRequires:	zoo
 Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires:	file
 Requires:	sh-utils
@@ -82,6 +84,7 @@ install %{SOURCE2} m4/acx_pthread.m4
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
+%{__autoheader}
 %{__autoconf}
 %{__automake}
 %configure \
@@ -133,13 +136,16 @@ if [ -n "`id -u amavis 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
+        echo "adding user amavis UID=97."
 	/usr/sbin/useradd -u 97 -r -d /var/spool/amavis  -s /bin/false -c "Anti Virus Checker" -g nobody  amavis 1>&2
 fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel amavis
+	echo "Removing group amavis."
 	/usr/sbin/groupdel amavis
+        echo "Removing user amavis."
+	/usr/sbin/userdel amavis
 fi
 
 %files
