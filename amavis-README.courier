@@ -1,0 +1,74 @@
+How To Use AMaViS With courier
+******************************
+
+ By Lars Hecking <lhecking@users.sourceforge.net>
+ Modified for Courier by Jim Gifford <giffordj@linkline.com>
+
+  This setup requires Courier and Maildrop.
+
+  You'll also need external unpackers, like arc etc.
+
+  And yes, you need to have a virusscanner installed; and it must be
+  in the $PATH environment variable.
+
+  Also, a problem one might run into is some weird configure output
+  about undefined macros. To fix this, one needs to install:
+
+  http://cryp.to/autoconf-archive/Installed_Packages/acx_pthread.m4
+  into the directory specified by 'aclocal --print-ac-dir' and then rerun 
+  aclocal && automake && autoconf !
+
+  In this configuration, amavis runs under a non-privileged user id
+  (by default: amavis). Make sure it exists before proceeding.  If  a different
+  user is chosen, use the "--with-amavisuser=USER" configure option for amavis.
+
+  So, if you use defaults
+
+  ./configure  --enable-courier
+
+  it should work.
+
+  Configuring courier itself is very simple:
+
+  * a change to /etc/courier/courierd or /usr/lib/etc/courier/courierd:
+
+  From
+  DEFAULTDELIVERY="| /usr/bin/maildrop"
+  or
+  DEFAULTDELIVERY=./Mail/Maildir
+
+  To
+  DEFAULTDELIVERY="| /usr/sbin/amavis | /usr/bin/maildrop"
+
+  This is the recommended setup for Amavis. There is an alternative
+  method which is listed below.
+
+  * a change to /etc/courier/courierd or /usr/lib/etc/courier/courierd:
+
+  From
+  DEFAULTDELIVERY=./Mail/Maildir
+
+  To
+  DEFAULTDELIVERY="| /usr/bin/maildrop"
+
+  * add to /etc/courier/maildroprc or /usr/lib/etc/courier/maildroprc:
+ 
+   # Virus Scan
+   #
+   import SENDER
+   import RECIPIENT
+
+   xfilter "/usr/sbin/amavis $SENDER $RECIPIENT"
+
+  Additional Maildroprc rules
+
+  If you would like to put your infected emails into their own Maildir
+  you can add the following line to your maildroprc file. Make sure
+  you create the Maildir or this rule will not work properly
+
+  if (/^Subject:.*VIRUS IN*/)
+	{
+		exception {
+			to "$DEFAULT/.Virus/"
+			}
+ 	}
