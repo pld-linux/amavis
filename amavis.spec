@@ -60,7 +60,7 @@ a jednym lub wiêcej programów antywirusowych.
 %build
 aclocal
 automake -a -c
-autoconf
+%{__autoconf}
 %configure \
 	--enable-all \
 	--with-sendmail-wrapper=%{_sbindir}/sendmail \
