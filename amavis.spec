@@ -15,8 +15,13 @@ Patch0:		%{name}-config.patch
 License:	GPL
 Group:		Applications/Mail
 Obsoletes:	AMaViS
+BuildRequires:	arc
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
+BuildRequires:	bzip2
+BuildRequires:	file
+BuildRequires:	lha
+BuildRequires:	ncompress
 BuildRequires:	perl-modules
 BuildRequires:	perl-Convert-UUlib
 BuildRequires:	perl-Convert-TNEF
@@ -25,13 +30,9 @@ BuildRequires:	perl-Archive-Tar
 BuildRequires:	perl-Archive-Zip
 BuildRequires:	perl-Compress-Zlib
 BuildRequires:	perl-MIME-tools
-BuildRequires:	file
+BuildRequires:	sendmail-devel
 BuildRequires:	sh-utils
-BuildRequires:	arc
-BuildRequires:	bzip2
-BuildRequires:	lha
 BuildRequires:	unarj
-BuildRequires:	ncompress
 BuildRequires:	unrar
 BuildRequires:	zoo
 Requires(pre):	/bin/id
@@ -39,13 +40,13 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
-Requires:	file
-Requires:	sh-utils
 Requires:	arc
 Requires:	bzip2
+Requires:	file
 Requires:	lha
-Requires:	unarj
 Requires:	ncompress
+Requires:	sh-utils
+Requires:	unarj
 Requires:	unrar
 Requires:	zoo
 Obsoletes:	amavisd
