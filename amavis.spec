@@ -1,63 +1,100 @@
+%include	/usr/lib/rpm/macros.perl    
 Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
-Version:	0.2.1
+Version:	11
 Release:	1
-URL:		http://www.amavis.org
-Source0:	http://www.amavis.org/dist/%{name}-%{version}.tar.gz
-Patch0:		%{name}-AVP-opt.patch
+URL:		http://www.amavis.org/
+Source0:	http://www.amavis.org/dist/%{name}-perl-%{version}.tar.gz
 License:	GPL
 Group:		Applications/Mail
 Group(de):	Applikationen/Post
 Group(pl):	Aplikacje/Poczta
 Group(pt):	Aplicações/Correio Eletrônico
 Obsoletes:	AMaViS
-Requires:	%{_sbindir}/sendmail
-#Requires:	/usr/local/AvpLinux/AvpLinux
-BuildRequires:	%{_sbindir}/sendmail
-#BuildRequires:	/usr/local/AvpLinux/AvpLinux
-BuildRequires:	maildrop
-BuildRequires:	tnef
-# does it really needed for build?
+BuildRequires:	autoconf >= 2.52
+BuildRequires:	perl
+BuildRequires:	perl-modules
+BuildRequires:	perl-Convert-UUlib
+BuildRequires:	perl-Convert-TNEF
+BuildRequires:	perl-Unix-Syslog
+BuildRequires:	perl-Archive-Tar
+BuildRequires:	perl-Archive-Zip
+BuildRequires:	perl-Compress-Zlib
+BuildRequires:	perl-MIME-tools
+BuildRequires:	file
+BuildRequires:	sh-utils
+BuildRequires:	arc
+BuildRequires:	bzip2
+BuildRequires:	lha
+BuildRequires:	unarj
+BuildRequires:	ncompress
 BuildRequires:	unrar
-BuildRequires:	unzip
-BuildRequires:	sharutils
-BuildRequires:	qmail
+BuildRequires:	zoo
+Requires:	file
+Requires:	sh-utils
+Requires:	arc
+Requires:	bzip2
+Requires:	lha
+Requires:	unarj
+Requires:	ncompress
+Requires:	unrar
+Requires:	zoo
+Requires:	%{_sbindir}/sendmail
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-A Mail Virus Scanner for Linux and other UN*X based platforms.
+AMaViS is a script that interfaces a mail transport agent (MTA) with
+one or more virus scanners.
 
 %description -l pl
-Antywirusowy skaner poczty dla Linuksa i innych systemów Uniksowych.
+AMaViS to skrypt po¶rednicz±cy pomiêdzy agentem transferu poczty (MTA)
+a jednym lub wiêcej programów antywirusowych.
 
 %prep
-%setup -q
-#%patch0 -p1
+%setup -q -n %{name}-perl-%{version}
 
 %build
-#touch depcomp
-#autoconf
-#automake
-%configure --enable-sendmail=%{_sbindir}/sendmail \
-	--with-virusdir=/var/spool/virus 
+autoconf
+%configure \
+	--enable-all \
+	--with-sendmail-wrapper=%{_sbindir}/sendmail \
+	--with-runtime-dir=/var/spool/amavis/runtime \
+	--with-virusdir=/var/spool/amavis/virusmails \
+	--with-mailto="postmaster" \
+	--with-amavisuser=amavis
+
 %{__make}
+
+gzip -9nf README* AUTHORS BUGS ChangeLog FAQ HINTS TODO doc/amavis.html
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/var/spool/virus
-install -d $RPM_BUILD_ROOT/var/log/scanmails
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+
+%{__make} install \
+	amavisuser=$(id -u) \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/securetar
-%attr(755,root,root) %{_bindir}/zipsecure
-%attr(755,root,root) %{_sbindir}/scanmails
-%doc AUTHORS COPYING README* BUGS FAQ
-%doc doc/amavis.html doc/amavis.txt
-%attr(1755,root,root) /var/spool/virus
-%attr(750,root,root) /var/log/scanmails
+%attr(755,root,root) %{_sbindir}/*
+%doc *.gz doc/*.gz doc/amavis.png
+%attr(750,amavis,root) /var/spool/amavis
+
+%pre
+if [ -n "`id -u amavis 2>/dev/null`" ]; then
+        if [ "`id -u amavis`" != "97" ]; then
+                echo "Warning: user amavis haven't uid=97. Correct this before installing amavis" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/useradd -u 97 -r -d /var/spool/amavis  -s /bin/false -c "Anti Virus Checker" -g nobody  amavis 1>&2
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+        /usr/sbin/userdel amavis
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
