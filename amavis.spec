@@ -30,6 +30,7 @@ BuildRequires:	perl-Archive-Tar
 BuildRequires:	perl-Archive-Zip
 BuildRequires:	perl-Compress-Zlib
 BuildRequires:	perl-MIME-tools
+BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	sendmail-devel
 BuildRequires:	sh-utils
 BuildRequires:	unarj
