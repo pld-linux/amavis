@@ -1,19 +1,19 @@
 
-# conditional build _with_mks32 support for mks32 i386 _only_
-
 %include	/usr/lib/rpm/macros.perl
 Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	11
-Release:	1
+Release:	2
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-perl-%{version}.tar.gz
-%{?_with_mks32:Patch0: %{name}-perl-mks32.patch}
+Patch0:		%{name}-perl-mks32.patch
+Patch1:		%{name}-nomilter.patch
 License:	GPL
 Group:		Applications/Mail
 Obsoletes:	AMaViS
 BuildRequires:	autoconf >= 2.52
+BuildRequires:	automake
 BuildRequires:	perl
 BuildRequires:	perl-modules
 BuildRequires:	perl-Convert-UUlib
@@ -54,9 +54,12 @@ a jednym lub wiêcej programów antywirusowych.
 
 %prep
 %setup -q -n %{name}-perl-%{version}
-%{?_with_mks32:%patch -p1}
+%patch0 -p1
+%patch1 -p1
 
 %build
+aclocal
+automake -a -c
 autoconf
 %configure \
 	--enable-all \
