@@ -21,6 +21,7 @@ BuildRequires:	automake
 BuildRequires:	bzip2
 BuildRequires:	file
 BuildRequires:	lha
+BuildRequires:	libtool
 BuildRequires:	ncompress
 BuildRequires:	perl-modules
 BuildRequires:	perl-Convert-UUlib
