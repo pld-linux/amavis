@@ -122,13 +122,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -n "`getgid amavis`" ]; then
-        if [ "`getgid amavis`" != "116" ]; then
-                echo "Error: group amavis doesn't have gid=116. Correct this before installing amavis." 1>&2
-                exit 1
-        fi
+	if [ "`getgid amavis`" != "116" ]; then
+		echo "Error: group amavis doesn't have gid=116. Correct this before installing amavis." 1>&2
+		exit 1
+	fi
 else
-        echo "adding group amavis GID=116."
-        /usr/sbin/groupadd -g 116 -r -f amavis
+	echo "adding group amavis GID=116."
+	/usr/sbin/groupadd -g 116 -r -f amavis
 fi
 
 if [ -n "`id -u amavis 2>/dev/null`" ]; then
@@ -137,15 +137,15 @@ if [ -n "`id -u amavis 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-        echo "adding user amavis UID=97."
-	/usr/sbin/useradd -u 97 -r -d /var/spool/amavis  -s /bin/false -c "Anti Virus Checker" -g nobody  amavis 1>&2
+	echo "adding user amavis UID=97."
+	/usr/sbin/useradd -u 97 -r -d /var/spool/amavis -s /bin/false -c "Anti Virus Checker" -g nobody amavis 1>&2
 fi
 
 %postun
 if [ "$1" = "0" ]; then
 	echo "Removing group amavis."
 	/usr/sbin/groupdel amavis
-        echo "Removing user amavis."
+	echo "Removing user amavis."
 	/usr/sbin/userdel amavis
 fi
 
