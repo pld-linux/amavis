@@ -41,8 +41,8 @@ A Mail Virus Scanner for Linux and other UN*X based platforms.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/var/spool/virus
-mkdir -p $RPM_BUILD_ROOT/var/log/scanmails
+install -d $RPM_BUILD_ROOT/var/spool/virus
+install -d $RPM_BUILD_ROOT/var/log/scanmails
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 %files
