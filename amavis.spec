@@ -9,6 +9,7 @@ Release:	0.1
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-%{version}.tar.gz
 # Source0-md5:	2b90dba30a5ea2b73c2b348e26967f30
+Source1:	amavis-README.courier
 License:	GPL
 Group:		Applications/Mail
 Obsoletes:	AMaViS
@@ -43,7 +44,6 @@ Requires:	unarj
 Requires:	ncompress
 Requires:	unrar
 Requires:	zoo
-Requires:	/usr/sbin/sendmail
 Obsoletes:	amavisd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -55,23 +55,42 @@ one or more virus scanners.
 AMaViS to skrypt po¶rednicz±cy pomiêdzy agentem transferu poczty (MTA)
 a jednym lub wiêcej programów antywirusowych.
 
+%package courier
+Summary:	A Mail Virus Scanner - courier backend
+Summary(pl):	Antywirusowy skaner poczty elektronicznej - backend dla couriera
+Group:		Applications/Mail
+Requires:	amavis = %{version}-%{release}
+Requires:	courier
+Provides:	amavis-courier
+
+%description courier
+AMaViS is a script that interfaces a mail transport agent (MTA) with
+one or more virus scanners. This package contains backend for courier.
+
+%description courier -l pl
+AMaViS to skrypt po¶rednicz±cy pomiêdzy agentem transferu poczty (MTA)
+a jednym lub wiêcej programów antywirusowych.
+
 %prep
 %setup -q
 
 %build
-%{__aclocal}
-%{__automake}
-%{__autoconf}
-%configure \
+#%{__aclocal}
+#%{__autoconf}
+#%{__automake}
+%configure2_13 \
 	--enable-all \
 	--with-sendmail-wrapper=%{_sbindir}/sendmail \
 	--with-runtime-dir=/var/spool/amavis/runtime \
 	--with-virusdir=/var/spool/amavis/virusmails \
 	--with-mailto="postmaster" \
+	--enable-courier \
 	--with-amavisuser=amavis \
 	--with-perl=%{__perl}
 
 %{__make}
+
+cp amavis/amavis amavis/amavis.courier
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -79,6 +98,12 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	amavisuser=$(id -u) \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install %{SOURCE1} ./README.courier
+install amavis/amavis.courier $RPM_BUILD_ROOT%{_sbindir}
+
+# remove unneccessary files
+rm -f %{_sbindir}/amavis
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -100,6 +125,10 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_sbindir}/*
-%doc README* AUTHORS BUGS ChangeLog FAQ HINTS TODO doc/amavis.html doc/amavis.png
+%doc README README.scanners AUTHORS BUGS ChangeLog FAQ TODO doc/amavis.html doc/amavis.png
 %attr(750,amavis,root) /var/spool/amavis
+
+%files courier
+%defattr(644,root,root,755)
+%doc README.courier
+%attr(755,root,root) %{_sbindir}/amavis.courier
