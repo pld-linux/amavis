@@ -12,9 +12,6 @@ Source0:	http://www.amavis.org/dist/perl/%{name}-perl-%{version}.tar.gz
 %{?_with_mks32:Patch0:		amavis-perl-mks32.patch}
 License:	GPL
 Group:		Applications/Mail
-Group(de):	Applikationen/Post
-Group(pl):	Aplikacje/Poczta
-Group(pt):	Aplicações/Correio Eletrônico
 Obsoletes:	AMaViS
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	perl
