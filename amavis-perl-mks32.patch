@@ -1,0 +1,102 @@
+--- amavis-perl-11/Makefile.in	Fri Apr  6 15:16:54 2001
++++ amavis-perl-11/Makefile.in	Mon Feb 11 17:12:02 2002
+@@ -1,4 +1,4 @@
+-# Makefile.in generated automatically by automake 1.4c from Makefile.am
++# Makefile.in generated automatically by automake 1.4b from Makefile.am
+ 
+ # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000
+ # Free Software Foundation, Inc.
+@@ -103,6 +103,7 @@
+ mailfrom = @mailfrom@
+ mailto = @mailto@
+ maxlevel = @maxlevel@
++mks = @mks@
+ nod32 = @nod32@
+ perl = @perl@
+ procmail = @procmail@
+--- amavis-perl-11/amavis/Makefile.in	Fri Apr  6 15:17:08 2001
++++ amavis-perl-11/amavis/Makefile.in	Mon Feb 11 17:12:02 2002
+@@ -1,4 +1,4 @@
+-# Makefile.in generated automatically by automake 1.4c from Makefile.am
++# Makefile.in generated automatically by automake 1.4b from Makefile.am
+ 
+ # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000
+ # Free Software Foundation, Inc.
+@@ -103,6 +103,7 @@
+ mailfrom = @mailfrom@
+ mailto = @mailto@
+ maxlevel = @maxlevel@
++mks = @mks@
+ nod32 = @nod32@
+ perl = @perl@
+ procmail = @procmail@
+ 
+--- amavis-perl-11/amavis/av/mks        Thu Jan  1 01:00:00 1970
++++ amavis-perl-11/amavis/av/mks    Sun Feb 10 20:56:02 2002
+@@ -0,0 +1,19 @@
++#
++# Mks32
++#
++
++if ($mks ne "") {
++       chdir($MKSDIR) || do_exit($REGERR, __LINE__);
++       $output = `$mks -e -s $TEMPDIR/parts`;
++       $errval = $?;
++       chdir($TEMPBASE);
++       do_log(2,$output);
++       if ($errval != 0) {
++               if ($errval < 0x80) {
++                       @virusname = ($output =~ file: (.+)/g);
++                       do_virus($output);
++               } else {
++                       do_log(0,"Virus scanner failure: $mks (error code: $errval)");
++               }
++       }
++}
+--- amavis-perl-11/configure.in	Fri Apr  6 15:15:41 2001
++++ aqq/configure.in	Mon Feb 11 17:47:31 2002
+@@ -178,11 +178,9 @@
+   AC_CHECK_FUNCS(setsockopt,,AC_CHECK_LIB(socket,setsockopt))
+   AC_CHECK_FUNCS(mktemp mkdtemp strlcpy)
+ 
+-  ACX_PTHREAD([
+-    LIBS="$PTHREAD_LIBS $LIBS"
++  ACX_PTHREAD([ LIBS="$PTHREAD_LIBS $LIBS"
+     CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+     CC="$PTHREAD_CC"
+-
+     AC_CHECK_HEADERS(libmilter/mfapi.h,
+       AC_CHECK_LIB(milter,smfi_main,
+         LIBS="-lmilter -lsmutil $LIBS",
+@@ -357,6 +355,7 @@
+   rav_scanner_frag=$srcdir/amavis/av/rav
+   sophos_scanner_frag=$srcdir/amavis/av/sophos
+   trend_scanner_frag=$srcdir/amavis/av/trend
++  mks_scanner_frag=$srcdir/amavis/av/mks
+ 
+   avscanner=" ALL"
+ else 
+@@ -601,8 +600,22 @@
+   csav_scanner_frag=$srcdir/amavis/av/csav
+ fi
+ 
++mks_scanner_frag=/dev/null
++AC_CHECKING([*** Command AntiVirus for Linux ***])
++AC_PATH_PROG(csav, csav, , $PATH:/bin:/usr/bin:/usr/local/bin)
++if test "x$mks" = "x" ; then
++  AC_MSG_WARN([************************************************************])
++  AC_MSG_WARN([***       Mks32 Beta		for    Linux NOT found          ***])
++  AC_MSG_WARN([***                  but that's ok                       ***])
++  AC_MSG_WARN([************************************************************])
++else
++	avscanner="$avscanner Mks32 Beta for Linux"
++    mks_scanner_frag=$srcdir/amavis/av/mks
++fi
++			
++
+ AC_MSG_CHECKING([if any virus scanners are installed at all])
+-if test "x$antivir$uvscan$ufindvir$fvsco$sophos$avp$avpdc$fsav$vscan$vfind$inocucmd$rav$nod32$csav" = "x" ; then
++if test "x$antivir$uvscan$ufindvir$fvsco$sophos$avp$avpdc$fsav$vscan$vfind$inocucmd$rav$nod32$csav$mks" = "x" ; then
+   AC_MSG_RESULT([no])
+   AC_MSG_ERROR([
+ 
