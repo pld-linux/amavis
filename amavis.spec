@@ -1,5 +1,5 @@
-
 %include	/usr/lib/rpm/macros.perl
+
 Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
@@ -71,35 +71,35 @@ autoconf
 
 %{__make}
 
-gzip -9nf README* AUTHORS BUGS ChangeLog FAQ HINTS TODO doc/amavis.html
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	amavisuser=$(id -u) \
 	DESTDIR=$RPM_BUILD_ROOT
+gzip -9nf README* AUTHORS BUGS ChangeLog FAQ HINTS TODO doc/amavis.html
+
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%pre
+if [ -n "`id -u amavis 2>/dev/null`" ]; then
+	if [ "`id -u amavis`" != "97" ]; then
+		echo "Warning: user amavis haven't uid=97. Correct this before installing amavis" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 97 -r -d /var/spool/amavis  -s /bin/false -c "Anti Virus Checker" -g nobody  amavis 1>&2
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+	/usr/sbin/userdel amavis
+fi
 
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/*
 %doc *.gz doc/*.gz doc/amavis.png
 %attr(750,amavis,root) /var/spool/amavis
-
-%pre
-if [ -n "`id -u amavis 2>/dev/null`" ]; then
-        if [ "`id -u amavis`" != "97" ]; then
-                echo "Warning: user amavis haven't uid=97. Correct this before installing amavis" 1>&2
-                exit 1
-        fi
-else
-        /usr/sbin/useradd -u 97 -r -d /var/spool/amavis  -s /bin/false -c "Anti Virus Checker" -g nobody  amavis 1>&2
-fi
-
-%postun
-if [ "$1" = "0" ]; then
-        /usr/sbin/userdel amavis
-fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
