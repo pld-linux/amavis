@@ -7,6 +7,7 @@ Version:	11
 Release:	4
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-perl-%{version}.tar.gz
+# Source0-md5:	e19bfabb2da4aeccc8227766995442d5
 Patch0:		%{name}-perl-mks32.patch
 Patch1:		%{name}-nomilter.patch
 License:	GPL
