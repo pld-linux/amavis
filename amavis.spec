@@ -4,7 +4,7 @@ Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	11
-Release:	2
+Release:	3
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-perl-%{version}.tar.gz
 Patch0:		%{name}-perl-mks32.patch
@@ -32,6 +32,9 @@ BuildRequires:	unarj
 BuildRequires:	ncompress
 BuildRequires:	unrar
 BuildRequires:	zoo
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/userdel
 Requires:	file
 Requires:	sh-utils
 Requires:	arc
@@ -41,7 +44,7 @@ Requires:	unarj
 Requires:	ncompress
 Requires:	unrar
 Requires:	zoo
-Requires:	%{_sbindir}/sendmail
+Requires:	/usr/sbin/sendmail
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -77,8 +80,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	amavisuser=$(id -u) \
 	DESTDIR=$RPM_BUILD_ROOT
-gzip -9nf README* AUTHORS BUGS ChangeLog FAQ HINTS TODO doc/amavis.html
-
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,7 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ -n "`id -u amavis 2>/dev/null`" ]; then
 	if [ "`id -u amavis`" != "97" ]; then
-		echo "Warning: user amavis haven't uid=97. Correct this before installing amavis" 1>&2
+		echo "Error: user amavis doesn't have uid=97. Correct this before installing amavis." 1>&2
 		exit 1
 	fi
 else
@@ -101,5 +102,5 @@ fi
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/*
-%doc *.gz doc/*.gz doc/amavis.png
+%doc README* AUTHORS BUGS ChangeLog FAQ HINTS TODO doc/amavis.html doc/amavis.png
 %attr(750,amavis,root) /var/spool/amavis
