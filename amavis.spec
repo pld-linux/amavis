@@ -4,12 +4,14 @@
 Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
-Version:	0.3.13%{sub_ver}
-Release:	0.1
+Version:	0.3.13
+Release:	0.9.%{sub_ver}
 URL:		http://www.amavis.org/
-Source0:	http://www.amavis.org/dist/perl/%{name}-%{version}.tar.gz
+Source0:	http://www.amavis.org/dist/perl/%{name}-%{version}%{sub_ver}.tar.gz
 # Source0-md5:	2b90dba30a5ea2b73c2b348e26967f30
-Source1:	amavis-README.courier
+Source1:	%{name}-README.courier
+Source2:	%{name}-acx_pthread.m4
+Patch0:		%{name}-config.patch
 License:	GPL
 Group:		Applications/Mail
 Obsoletes:	AMaViS
@@ -72,13 +74,17 @@ AMaViS to skrypt po¶rednicz±cy pomiêdzy agentem transferu poczty (MTA)
 a jednym lub wiêcej programów antywirusowych.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}%{sub_ver}
+%patch0 -p1
+install -d m4
+install %{SOURCE2} m4/acx_pthread.m4
 
 %build
-#%{__aclocal}
-#%{__autoconf}
-#%{__automake}
-%configure2_13 \
+%{__libtoolize}
+%{__aclocal} -I m4
+%{__autoconf}
+%{__automake}
+%configure \
 	--enable-all \
 	--with-sendmail-wrapper=%{_sbindir}/sendmail \
 	--with-runtime-dir=/var/spool/amavis/runtime \
@@ -99,16 +105,28 @@ rm -rf $RPM_BUILD_ROOT
 	amavisuser=$(id -u) \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE1} ./README.courier
 install amavis/amavis.courier $RPM_BUILD_ROOT%{_sbindir}
+install amavis/amavis.conf $RPM_BUILD_ROOT%{_sysconfdir}/amavis.conf
 
 # remove unneccessary files
-rm -f %{_sbindir}/amavis
+rm -f $RPM_BUILD_ROOT%{_sbindir}/amavis
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %pre
+if [ -n "`getgid amavis`" ]; then
+        if [ "`getgid amavis`" != "116" ]; then
+                echo "Error: group amavis doesn't have gid=116. Correct this before installing amavis." 1>&2
+                exit 1
+        fi
+else
+        echo "adding group amavis GID=116."
+        /usr/sbin/groupadd -g 116 -r -f amavis
+fi
+
 if [ -n "`id -u amavis 2>/dev/null`" ]; then
 	if [ "`id -u amavis`" != "97" ]; then
 		echo "Error: user amavis doesn't have uid=97. Correct this before installing amavis." 1>&2
@@ -121,12 +139,16 @@ fi
 %postun
 if [ "$1" = "0" ]; then
 	/usr/sbin/userdel amavis
+	/usr/sbin/groupdel amavis
 fi
 
 %files
 %defattr(644,root,root,755)
 %doc README README.scanners AUTHORS BUGS ChangeLog FAQ TODO doc/amavis.html doc/amavis.png
-%attr(750,amavis,root) /var/spool/amavis
+%attr(751,amavis,amavis) %dir /var/spool/amavis
+%attr(753,amavis,amavis) %dir /var/spool/amavis/runtime
+%attr(753,amavis,amavis) %dir /var/spool/amavis/virusmails
+%attr(644,amavis,amavis) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/amavis.conf
 
 %files courier
 %defattr(644,root,root,755)
