@@ -1,0 +1,463 @@
+diff -Nur old/amavis/amavis.conf.in new/amavis/amavis.conf.in
+--- old/amavis/amavis.conf.in	1970-01-01 00:00:00.000000000 +0000
++++ new/amavis/amavis.conf.in	2004-07-12 16:20:42.000000000 +0000
+@@ -0,0 +1,218 @@
++################################################################################
++# Customisable variable from here on
++################################################################################
++
++#
++# Av scanners
++
++# NAI AntiVirus (uvscan)
++$uvscan = "@uvscan@";
++
++# H+BEDV AntiVir
++$antivir = "@antivir@";
++
++# Sophos Anti Virus (sweep)
++$sophos = "@sophos@";
++$sophos_ide_path = "@sophos_ide@";
++
++# KasperskyLab AntiViral Toolkit Pro (AVP)
++$avp = "@avp@";
++$AVPDIR = dirname($avp);
++
++# KasperskyLab AVPDaemon / AvpDaemonClient
++#
++# use AvpDaemon and AvpDaemonClient
++# Note: AvpDaemon must be started before amavisd!
++# AvpDaemon should be started at boot time as AvpDaemon -* /var/amavis
++$avpdc = "@avpdc@";
++
++# F-Secure Antivirus
++$fsav = "@fsav@";
++
++# Trend Micro FileScanner
++$vscan = "@vscan@";
++
++# CyberSoft VFind
++$vfind = "@vfind@";
++
++# CAI InoculateIT
++$inocucmd = "@inocucmd@";
++
++# GeCAD RAV Antivirus 8
++$rav = "@rav@";
++
++# ESET Software NOD32
++$nod32 = "@nod32@";
++
++# ESET Software NOD32 (Client/Server Version)
++$nod32cli = "@nod32cli@";
++
++# Command AntiVirus for Linux
++$csav = "@csav@";
++
++# VirusBuster (Daemon + Client)
++$vbengcl = "@vbengcl@";
++
++# Symantec CarrierScan via Symantec Command Line Scannner
++$cscmdline = "@cscmdline@";
++$scs_host = "@scs_host@";  # host/IP CarrierScan runs on
++$scs_port = "@scs_port@";  # port CarrierScan listens on
++
++# Sophie (Sophos SAVI)
++$sophie_sockname = "@sophie_sockname@";
++
++# Trophie (Trend API)
++$trophie_sockname = "@trophie_sockname@";
++
++# FRISK F-Prot
++$fprot = "@fprot@";
++
++# FRISK F-Prot Daemon
++$fprotd = "@fprotd@";
++
++# Panda Antivirus for Linux
++$panda = "@panda@";
++
++# CentralCommand Vexira
++$vexira = "@vexira@";
++
++# OpenAntiVirus ScannerDaemon
++$oav = "@oav@";
++
++# DrWeb Antivirus for Linux/FreeBSD/Solaris
++$drweb = "@drweb@";
++
++# MkS_Vir for Linux (beta)
++$mks = "@mks@";
++
++# MkS_Vir Daemon for Linux (beta)
++$mksd = "@mksd@";
++
++# Norman Virus Control 
++$norman = "@norman@";
++
++# Clam Antivirus
++$clamscan = "@clamscan@";
++
++$clamd = "@clamd@";
++
++# Ikarus AntiVirus
++$ikarus = "@ikarus@";
++
++# AVG Anti-Virus
++$avg = "@avg@";
++$avgd = "@avgd@";
++
++#
++# Logging
++
++# yes - syslog, no - file logging
++$do_syslog = "@do_syslog@";
++
++# Directory to put log entries (if not using syslog)
++$LOGDIR = "@logdir@";
++$LOGFILE = "amavis.log";
++
++# 0: default - startup/exit/failure messages
++# 1: args passed from client
++# 2: virus scanner output
++# 3: server client
++# 4: decompose parts
++$log_level = 0;
++
++#
++# Notification etc.
++
++# Notify admin/sender/recipient [yes/no]?
++$warnadmin = "@warnadmin@";
++$warnsender = "@warnsender@";
++$warnrecip = "@warnrecip@";
++
++# Notify off-site recipients?
++$warn_offsite = "no";
++
++# requeue if all virus scanners failed
++$requeue_on_scanner_errors = "yes";
++
++#
++$viruses_that_fake_sender_re = qr(/(?i)nimda|hybris|klez|bugbear|yaha|braid|sobig|fizzer|palyh|peido|holar|tanatos|lentin|bridex|mimail|trojan\.dropper|dumaru|parite|spaces|dloader|galil|gibe|swen|netwatch|bics|sbrowse|sober|rox|val(hal)?la|be?agle/);
++
++# List of local domains
++# e.g. @local_domains = qw( dom.ain other.dom.ain );
++@local_domains = qw();
++
++# Location to put infected mail - leave empty for not quarantining
++$QUARANTINEDIR = "@virusdir@";
++
++# Add X-Virus-Scanned line to mail?
++$X_HEADER_TAG = "X-Virus-Scanned";
++# Leave empty to add no header
++$X_HEADER_LINE = "by AMaViS @VERSION@";
++
++#
++# External programs
++
++$arc = "@arc@";
++$bunzip = "@bunzip2@";
++$file = "@file@";
++$lha = "@lha@";
++$unarj = "@unarj@";
++$uncompress = "@uncompress@";
++$unrar = "@unrar@";
++$zoo = "@zoo@";
++
++#
++# MTA specific stuff
++
++# Qmail-specific
++$QMAILDIR = "@qmaildir@";
++
++# postfix-specific
++$smtp_port = "@smtp_port@";
++$localhost_name = "localhost";
++$localhost_ip = "127.0.0.1";
++
++# sendmail-specific
++# Do we use amavis on a mail relay/gateway type setup?
++$enable_relay = "@enable_relay@";
++
++#
++$sendmail_cf_orig = "@sendmail_cf_orig@";
++
++# What sendmail wrapper to use
++$sendmail_wrapper = "@sendmail_wrapper@";
++$sendmail_wrapper_args = "@sendmail_wrapper_args@";
++
++#
++# Misc
++
++# The next three are resource limitations - exit with EX_TEMPFAIL if exceeded
++# Maximum overall recursion level for extraction/decoding
++# default: 20 - DO NOT SET THIS TO 0
++$MAXLEVELS = @maxlevel@;
++
++# Maximum nesting level for compressing archive formats
++# default: 3. If set to 0, feature is disabled
++$MAX_ARCHIVE_NESTING = @maxdepth@;
++
++# Maximum number of extracted files
++# default: 500. If set to 0, feature is disabled
++$MAXFILES =  @maxfiles@;
++
++# Magic number to detect DoS attacks
++# default: 14. if set to 0, feature is disabled (change with care!)
++$threshold = 14;
++
++# Who reports are sent from
++$mailfrom = '@mailfrom@';
++
++# Where to send virus reports
++$mailto = '@mailto@';
++
++# Display AMaViS credits to users [yes/no]
++$credits = "@credits@";
++
++################################################################################
++# End of customisation section
++################################################################################
++1; # this must be the last line
+\ Brak znaku nowej linii na koñcu pliku
+diff -Nur old/amavis/amavis.in new/amavis/amavis.in
+--- old/amavis/amavis.in	2004-01-26 17:24:59.000000000 +0000
++++ new/amavis/amavis.in	2004-07-12 16:21:33.000000000 +0000
+@@ -103,223 +103,8 @@
+ $pkg_home_url = "@PKG_HOME_URL@";
+ @untaint_ARGV = ();
+ 
+-################################################################################
+-# Customisable variable from here on
+-################################################################################
+-
+-#
+-# Av scanners
+-
+-# NAI AntiVirus (uvscan)
+-$uvscan = "@uvscan@";
+-
+-# H+BEDV AntiVir
+-$antivir = "@antivir@";
+-
+-# Sophos Anti Virus (sweep)
+-$sophos = "@sophos@";
+-$sophos_ide_path = "@sophos_ide@";
+-
+-# KasperskyLab AntiViral Toolkit Pro (AVP)
+-$avp = "@avp@";
+-$AVPDIR = dirname($avp);
+-
+-# KasperskyLab AVPDaemon / AvpDaemonClient
+-#
+-# use AvpDaemon and AvpDaemonClient
+-# Note: AvpDaemon must be started before amavisd!
+-# AvpDaemon should be started at boot time as AvpDaemon -* /var/amavis
+-$avpdc = "@avpdc@";
+-
+-# F-Secure Antivirus
+-$fsav = "@fsav@";
+-
+-# Trend Micro FileScanner
+-$vscan = "@vscan@";
+-
+-# CyberSoft VFind
+-$vfind = "@vfind@";
+-
+-# CAI InoculateIT
+-$inocucmd = "@inocucmd@";
+-
+-# GeCAD RAV Antivirus 8
+-$rav = "@rav@";
+-
+-# ESET Software NOD32
+-$nod32 = "@nod32@";
+-
+-# ESET Software NOD32 (Client/Server Version)
+-$nod32cli = "@nod32cli@";
+-
+-# Command AntiVirus for Linux
+-$csav = "@csav@";
+-
+-# VirusBuster (Daemon + Client)
+-$vbengcl = "@vbengcl@";
+-
+-# Symantec CarrierScan via Symantec Command Line Scannner
+-$cscmdline = "@cscmdline@";
+-$scs_host = "@scs_host@";  # host/IP CarrierScan runs on
+-$scs_port = "@scs_port@";  # port CarrierScan listens on
+-
+-# Sophie (Sophos SAVI)
+-$sophie_sockname = "@sophie_sockname@";
+-
+-# Trophie (Trend API)
+-$trophie_sockname = "@trophie_sockname@";
+-
+-# FRISK F-Prot
+-$fprot = "@fprot@";
+-
+-# FRISK F-Prot Daemon
+-$fprotd = "@fprotd@";
+-
+-# Panda Antivirus for Linux
+-$panda = "@panda@";
+-
+-# CentralCommand Vexira
+-$vexira = "@vexira@";
+-
+-# OpenAntiVirus ScannerDaemon
+-$oav = "@oav@";
+-
+-# DrWeb Antivirus for Linux/FreeBSD/Solaris
+-$drweb = "@drweb@";
+-
+-# MkS_Vir for Linux (beta)
+-$mks = "@mks@";
+-
+-# MkS_Vir Daemon for Linux (beta)
+-$mksd = "@mksd@";
+-
+-# Norman Virus Control 
+-$norman = "@norman@";
+-
+-# Clam Antivirus
+-$clamscan = "@clamscan@";
+-
+-$clamd = "@clamd@";
+-
+-# Ikarus AntiVirus
+-$ikarus = "@ikarus@";
+-
+-# AVG Anti-Virus
+-$avg = "@avg@";
+-$avgd = "@avgd@";
+-
+-#
+-# Logging
+-
+-# yes - syslog, no - file logging
+-$do_syslog = "@do_syslog@";
+-
+-# Directory to put log entries (if not using syslog)
+-$LOGDIR = "@logdir@";
+-$LOGFILE = "amavis.log";
+-
+-# 0: default - startup/exit/failure messages
+-# 1: args passed from client
+-# 2: virus scanner output
+-# 3: server client
+-# 4: decompose parts
+-$log_level = 0;
+-
+-#
+-# Notification etc.
+-
+-# Notify admin/sender/recipient [yes/no]?
+-$warnadmin = "@warnadmin@";
+-$warnsender = "@warnsender@";
+-$warnrecip = "@warnrecip@";
+-
+-# Notify off-site recipients?
+-$warn_offsite = "no";
+-
+-# requeue if all virus scanners failed
+-$requeue_on_scanner_errors = "yes";
+-
+-#
+-$viruses_that_fake_sender_re = qr(/(?i)nimda|hybris|klez|bugbear|yaha|braid|sobig|fizzer|palyh|peido|holar|tanatos|lentin|bridex|mimail|trojan\.dropper|dumaru|parite|spaces|dloader|galil|gibe|swen|netwatch|bics|sbrowse|sober|rox|val(hal)?la|be?agle/);
+-
+-# List of local domains
+-# e.g. @local_domains = qw( dom.ain other.dom.ain );
+-@local_domains = qw();
+-
+-# Location to put infected mail - leave empty for not quarantining
+-$QUARANTINEDIR = "@virusdir@";
+-
+-# Add X-Virus-Scanned line to mail?
+-$X_HEADER_TAG = "X-Virus-Scanned";
+-# Leave empty to add no header
+-$X_HEADER_LINE = "by AMaViS @VERSION@";
+-
+-#
+-# External programs
+-
+-$arc = "@arc@";
+-$bunzip = "@bunzip2@";
+-$file = "@file@";
+-$lha = "@lha@";
+-$unarj = "@unarj@";
+-$uncompress = "@uncompress@";
+-$unrar = "@unrar@";
+-$zoo = "@zoo@";
+-
+-#
+-# MTA specific stuff
+-
+-# Qmail-specific
+-$QMAILDIR = "@qmaildir@";
+-
+-# postfix-specific
+-$smtp_port = "@smtp_port@";
+-$localhost_name = "localhost";
+-$localhost_ip = "127.0.0.1";
+-
+-# sendmail-specific
+-# Do we use amavis on a mail relay/gateway type setup?
+-$enable_relay = "@enable_relay@";
+-
+-#
+-$sendmail_cf_orig = "@sendmail_cf_orig@";
+-
+-# What sendmail wrapper to use
+-$sendmail_wrapper = "@sendmail_wrapper@";
+-$sendmail_wrapper_args = "@sendmail_wrapper_args@";
+-
+-#
+-# Misc
+-
+-# The next three are resource limitations - exit with EX_TEMPFAIL if exceeded
+-# Maximum overall recursion level for extraction/decoding
+-# default: 20 - DO NOT SET THIS TO 0
+-$MAXLEVELS = @maxlevel@;
+-
+-# Maximum nesting level for compressing archive formats
+-# default: 3. If set to 0, feature is disabled
+-$MAX_ARCHIVE_NESTING = @maxdepth@;
+-
+-# Maximum number of extracted files
+-# default: 500. If set to 0, feature is disabled
+-$MAXFILES =  @maxfiles@;
+-
+-# Magic number to detect DoS attacks
+-# default: 14. if set to 0, feature is disabled (change with care!)
+-$threshold = 14;
+-
+-# Who reports are sent from
+-$mailfrom = '@mailfrom@';
+-
+-# Where to send virus reports
+-$mailto = '@mailto@';
+-
+-# Display AMaViS credits to users [yes/no]
+-$credits = "@credits@";
+-
+-################################################################################
+-# End of customisation section
+-################################################################################
++# load config file
++do '/etc/amavis.conf';
+ 
+ #
+ # MTA init section
+diff -Nur old/configure.in new/configure.in
+--- old/configure.in	2004-01-22 12:25:38.000000000 +0000
++++ new/configure.in	2004-07-12 11:09:48.000000000 +0000
+@@ -1056,6 +1056,7 @@
+             amavis/checkaccount \
+             amavis/amavis       \
+             tests/Makefile      \
++	    amavis/amavis.conf
+           ],
+ [
+     test -f amavis/amavis && chmod 755 amavis/amavis
