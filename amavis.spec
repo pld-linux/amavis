@@ -4,7 +4,7 @@ Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	11
-Release:	3
+Release:	4
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-perl-%{version}.tar.gz
 Patch0:		%{name}-perl-mks32.patch
@@ -45,6 +45,7 @@ Requires:	ncompress
 Requires:	unrar
 Requires:	zoo
 Requires:	/usr/sbin/sendmail
+Obsoletes:	amavisd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
