@@ -48,7 +48,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/securetar
 %attr(755,root,root) %{_bindir}/zipsecure
 %attr(755,root,root) %{_sbindir}/scanmails
-%doc AUTHORS COPYING README BUGS FAQ
+%doc AUTHORS COPYING README* BUGS FAQ
 %doc doc/amavis.html doc/amavis.txt doc/amavis.gif
 
 %clean
