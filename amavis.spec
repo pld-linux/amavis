@@ -5,7 +5,7 @@ Name:		amavis
 Version:	11
 Release:	1
 URL:		http://www.amavis.org/
-Source0:	http://www.amavis.org/dist/%{name}-perl-%{version}.tar.gz
+Source0:	http://www.amavis.org/dist/perl/%{name}-perl-%{version}.tar.gz
 License:	GPL
 Group:		Applications/Mail
 Group(de):	Applikationen/Post
