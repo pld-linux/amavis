@@ -61,8 +61,8 @@ a jednym lub wiêcej programów antywirusowych.
 %patch1 -p1
 
 %build
-aclocal
-automake -a -c
+%{__aclocal}
+%{__automake}
 %{__autoconf}
 %configure \
 	--enable-all \
