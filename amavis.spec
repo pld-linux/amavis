@@ -1,4 +1,5 @@
 Summary:	A Mail Virus Scanner
+Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	0.2.1
 Release:	1
@@ -26,6 +27,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 A Mail Virus Scanner for Linux and other UN*X based platforms.
+
+%description -l pl
+Antywirusowy skaner poczty dla Linuksa i innych systemów Uniksowych.
 
 %prep
 %setup -q
