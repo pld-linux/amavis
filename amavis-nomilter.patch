@@ -1,0 +1,20 @@
+diff -Nru amavis-perl-11.orig/configure.in amavis-perl-11/configure.in
+--- amavis-perl-11.orig/configure.in	Tue Apr 23 13:24:28 2002
++++ amavis-perl-11/configure.in	Tue Apr 23 13:25:26 2002
+@@ -178,16 +178,6 @@
+   AC_CHECK_FUNCS(setsockopt,,AC_CHECK_LIB(socket,setsockopt))
+   AC_CHECK_FUNCS(mktemp mkdtemp strlcpy)
+ 
+-  ACX_PTHREAD([ LIBS="$PTHREAD_LIBS $LIBS"
+-    CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+-    CC="$PTHREAD_CC"
+-    AC_CHECK_HEADERS(libmilter/mfapi.h,
+-      AC_CHECK_LIB(milter,smfi_main,
+-        LIBS="-lmilter -lsmutil $LIBS",
+-        enable_milter=no,-lsmutil),
+-      enable_milter=no)],
+-    [AC_MSG_WARN([No usable pthreads library found - disabling milter])
+-     enable_milter=no])
+ fi
+ 
+ if test "x$enable_milter" = xyes ; then
