@@ -38,7 +38,7 @@ How To Use AMaViS With courier
   DEFAULTDELIVERY=./Mail/Maildir
 
   To
-  DEFAULTDELIVERY="| /usr/sbin/amavis | /usr/bin/maildrop"
+  DEFAULTDELIVERY="| /usr/sbin/amavis.courier | /usr/bin/maildrop"
 
   This is the recommended setup for Amavis. There is an alternative
   method which is listed below.
@@ -58,7 +58,7 @@ How To Use AMaViS With courier
    import SENDER
    import RECIPIENT
 
-   xfilter "/usr/sbin/amavis $SENDER $RECIPIENT"
+   xfilter "/usr/sbin/amavis.courier $SENDER $RECIPIENT"
 
   Additional Maildroprc rules
 
