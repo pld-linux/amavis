@@ -5,7 +5,7 @@ Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	0.3.13
-Release:	1.%{sub_ver}
+Release:	2.%{sub_ver}
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-%{version}%{sub_ver}.tar.gz
 # Source0-md5:	2b90dba30a5ea2b73c2b348e26967f30
