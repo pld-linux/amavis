@@ -1,15 +1,14 @@
 %include	/usr/lib/rpm/macros.perl
+%define		sub_ver	pre2
 
 Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
-Version:	11
-Release:	4
+Version:	0.3.13%{sub_ver}
+Release:	0.1
 URL:		http://www.amavis.org/
-Source0:	http://www.amavis.org/dist/perl/%{name}-perl-%{version}.tar.gz
-# Source0-md5:	e19bfabb2da4aeccc8227766995442d5
-Patch0:		%{name}-perl-mks32.patch
-Patch1:		%{name}-nomilter.patch
+Source0:	http://www.amavis.org/dist/perl/%{name}-%{version}.tar.gz
+# Source0-md5:	2b90dba30a5ea2b73c2b348e26967f30
 License:	GPL
 Group:		Applications/Mail
 Obsoletes:	AMaViS
@@ -57,9 +56,7 @@ AMaViS to skrypt po¶rednicz±cy pomiêdzy agentem transferu poczty (MTA)
 a jednym lub wiêcej programów antywirusowych.
 
 %prep
-%setup -q -n %{name}-perl-%{version}
-%patch0 -p1
-%patch1 -p1
+%setup -q
 
 %build
 %{__aclocal}
