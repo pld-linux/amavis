@@ -14,7 +14,6 @@ Group:		Applications/Mail
 Obsoletes:	AMaViS
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
-BuildRequires:	perl
 BuildRequires:	perl-modules
 BuildRequires:	perl-Convert-UUlib
 BuildRequires:	perl-Convert-TNEF
@@ -69,7 +68,8 @@ a jednym lub wiêcej programów antywirusowych.
 	--with-runtime-dir=/var/spool/amavis/runtime \
 	--with-virusdir=/var/spool/amavis/virusmails \
 	--with-mailto="postmaster" \
-	--with-amavisuser=amavis
+	--with-amavisuser=amavis \
+	--with-perl=%{__perl}
 
 %{__make}
 
