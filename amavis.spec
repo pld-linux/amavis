@@ -31,7 +31,7 @@ BuildRequires:	perl-Archive-Tar
 BuildRequires:	perl-Archive-Zip
 BuildRequires:	perl-Compress-Zlib
 BuildRequires:	perl-MIME-tools
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sendmail-devel
 BuildRequires:	sh-utils
 BuildRequires:	unarj
@@ -125,25 +125,8 @@ rm -f $RPM_BUILD_ROOT%{_sbindir}/amavis
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid amavis`" ]; then
-	if [ "`getgid amavis`" != "116" ]; then
-		echo "Error: group amavis doesn't have gid=116. Correct this before installing amavis." 1>&2
-		exit 1
-	fi
-else
-	echo "adding group amavis GID=116."
-	/usr/sbin/groupadd -g 116 -r -f amavis
-fi
-
-if [ -n "`id -u amavis 2>/dev/null`" ]; then
-	if [ "`id -u amavis`" != "97" ]; then
-		echo "Error: user amavis doesn't have uid=97. Correct this before installing amavis." 1>&2
-		exit 1
-	fi
-else
-	echo "adding user amavis UID=97."
-	/usr/sbin/useradd -u 97 -r -d /var/spool/amavis -s /bin/false -c "Anti Virus Checker" -g nobody amavis 1>&2
-fi
+%groupadd -g 116 -r -f amavis
+%useradd -u 97 -r -d /var/spool/amavis -s /bin/false -c "Anti Virus Checker" -g nobody amavis
 
 %postun
 if [ "$1" = "0" ]; then
