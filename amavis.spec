@@ -140,7 +140,7 @@ fi
 %attr(751,amavis,amavis) %dir /var/spool/amavis
 %attr(753,amavis,amavis) %dir /var/spool/amavis/runtime
 %attr(753,amavis,amavis) %dir /var/spool/amavis/virusmails
-%attr(644,amavis,amavis) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/amavis.conf
+%attr(644,amavis,amavis) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/amavis.conf
 
 %files courier
 %defattr(644,root,root,755)
