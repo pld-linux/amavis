@@ -31,11 +31,13 @@ BuildRequires:	perl-Archive-Tar
 BuildRequires:	perl-Archive-Zip
 BuildRequires:	perl-Compress-Zlib
 BuildRequires:	perl-MIME-tools
+BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sendmail-devel
 BuildRequires:	sh-utils
 BuildRequires:	unarj
 BuildRequires:	unrar
+BuildRequires:	unzip
 BuildRequires:	zoo
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
