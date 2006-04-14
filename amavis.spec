@@ -1,11 +1,11 @@
 %include	/usr/lib/rpm/macros.perl
 %define		sub_ver	pre2
-
+%define		_rel 1
 Summary:	A Mail Virus Scanner
 Summary(pl):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	0.3.13
-Release:	2.%{sub_ver}
+Release:	2.%{sub_ver}.%{_rel}
 URL:		http://www.amavis.org/
 Source0:	http://www.amavis.org/dist/perl/%{name}-%{version}%{sub_ver}.tar.gz
 # Source0-md5:	2b90dba30a5ea2b73c2b348e26967f30
@@ -14,36 +14,33 @@ Source2:	%{name}-acx_pthread.m4
 Patch0:		%{name}-config.patch
 License:	GPL
 Group:		Applications/Mail
-Obsoletes:	AMaViS
 BuildRequires:	arc
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
-BuildRequires:	bzip2
 BuildRequires:	file
 BuildRequires:	lha
 BuildRequires:	libtool
 BuildRequires:	ncompress
-BuildRequires:	perl-modules
-BuildRequires:	perl-Convert-UUlib
-BuildRequires:	perl-Convert-TNEF
-BuildRequires:	perl-Unix-Syslog
 BuildRequires:	perl-Archive-Tar
 BuildRequires:	perl-Archive-Zip
 BuildRequires:	perl-Compress-Zlib
+BuildRequires:	perl-Convert-TNEF
+BuildRequires:	perl-Convert-UUlib
 BuildRequires:	perl-MIME-tools
+BuildRequires:	perl-Unix-Syslog
+BuildRequires:	perl-modules
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sendmail-devel
-BuildRequires:	sh-utils
 BuildRequires:	unarj
 BuildRequires:	unrar
 BuildRequires:	unzip
 BuildRequires:	zoo
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
 Requires:	arc
 Requires:	bzip2
 Requires:	file
@@ -55,6 +52,7 @@ Requires:	unrar
 Requires:	zoo
 Provides:	group(amavis)
 Provides:	user(amavis)
+Obsoletes:	AMaViS
 Obsoletes:	amavisd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
