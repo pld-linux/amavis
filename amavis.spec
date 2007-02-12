@@ -2,7 +2,7 @@
 %define		sub_ver	pre2
 %define		_rel 2
 Summary:	A Mail Virus Scanner
-Summary(pl.UTF-8):   Antywirusowy skaner poczty elektronicznej
+Summary(pl.UTF-8):	Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	0.3.13
 Release:	2.%{sub_ver}.%{_rel}
@@ -66,7 +66,7 @@ a jednym lub więcej programów antywirusowych.
 
 %package courier
 Summary:	A Mail Virus Scanner - courier backend
-Summary(pl.UTF-8):   Antywirusowy skaner poczty elektronicznej - backend dla couriera
+Summary(pl.UTF-8):	Antywirusowy skaner poczty elektronicznej - backend dla couriera
 Group:		Applications/Mail
 Requires:	amavis = %{version}-%{release}
 Requires:	courier
