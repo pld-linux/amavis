@@ -2,7 +2,7 @@
 %define		sub_ver	pre2
 %define		_rel 2
 Summary:	A Mail Virus Scanner
-Summary(pl):	Antywirusowy skaner poczty elektronicznej
+Summary(pl.UTF-8):   Antywirusowy skaner poczty elektronicznej
 Name:		amavis
 Version:	0.3.13
 Release:	2.%{sub_ver}.%{_rel}
@@ -60,13 +60,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 AMaViS is a script that interfaces a mail transport agent (MTA) with
 one or more virus scanners.
 
-%description -l pl
-AMaViS to skrypt po¶rednicz±cy pomiêdzy agentem transferu poczty (MTA)
-a jednym lub wiêcej programów antywirusowych.
+%description -l pl.UTF-8
+AMaViS to skrypt poÅ›redniczÄ…cy pomiÄ™dzy agentem transferu poczty (MTA)
+a jednym lub wiÄ™cej programÃ³w antywirusowych.
 
 %package courier
 Summary:	A Mail Virus Scanner - courier backend
-Summary(pl):	Antywirusowy skaner poczty elektronicznej - backend dla couriera
+Summary(pl.UTF-8):   Antywirusowy skaner poczty elektronicznej - backend dla couriera
 Group:		Applications/Mail
 Requires:	amavis = %{version}-%{release}
 Requires:	courier
@@ -76,9 +76,9 @@ Provides:	amavis-courier
 AMaViS is a script that interfaces a mail transport agent (MTA) with
 one or more virus scanners. This package contains backend for courier.
 
-%description courier -l pl
-AMaViS to skrypt po¶rednicz±cy pomiêdzy agentem transferu poczty (MTA)
-a jednym lub wiêcej programów antywirusowych.
+%description courier -l pl.UTF-8
+AMaViS to skrypt poÅ›redniczÄ…cy pomiÄ™dzy agentem transferu poczty (MTA)
+a jednym lub wiÄ™cej programÃ³w antywirusowych.
 
 %prep
 %setup -q -n %{name}-%{version}%{sub_ver}
