@@ -1,4 +1,3 @@
-%include	/usr/lib/rpm/macros.perl
 %define		sub_ver	pre2
 %define		_rel 2
 Summary:	A Mail Virus Scanner
